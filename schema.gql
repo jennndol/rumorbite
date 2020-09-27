@@ -55,10 +55,18 @@ type UserPaginationResponse {
   list: [User!]!
 }
 
+type ArticlePaginationResponse {
+  """Count field"""
+  count: Int!
+
+  """Articles field"""
+  list: [Article!]!
+}
+
 type Query {
   users(param: PaginationParam!): UserPaginationResponse!
   user(id: Int!): User!
-  articles: [Article!]!
+  articles(param: PaginationParam!): ArticlePaginationResponse!
   article(id: Int!): Article!
 }
 

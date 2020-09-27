@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PaginationParam } from 'src/common/dto/pagination.param';
-import { Like, Repository } from 'typeorm';
+import { IsNull, Like, Repository } from 'typeorm';
 import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { UserPaginationResponse } from './dto/user-pagination.response';
@@ -11,7 +11,8 @@ import { User } from './entities/user.entity';
 export class UsersService {
   constructor(
     @InjectRepository(User)
-    private readonly userRepository: Repository<User>  ){}
+    private readonly userRepository: Repository<User>
+  ){}
 
   create(createUserInput: CreateUserInput): Promise<User> {
     const user = this.userRepository.create(createUserInput);
@@ -22,7 +23,7 @@ export class UsersService {
     const { q = '', limit, offset, orderBy='createdAt', orderType='DESC' } = paginationParam
     const [list, count] = await this.userRepository.findAndCount({
       relations: ['articles'],
-      where: [{ name: Like(`%${q}%`) }, { email: Like(`%${q}%`) }],
+      where: [{ name: Like(`%${q}%`), deletedAt: IsNull()}, { email: Like(`%${q}%`), deletedAt: IsNull()}],
       skip: offset,
       take: limit,
       order: {
@@ -36,7 +37,7 @@ export class UsersService {
   }
 
   findOne(id: number): Promise<User> {
-    return this.userRepository.findOne(id, { relations: ['articles'] });
+    return this.userRepository.findOne({id, deletedAt: IsNull()}, { relations: ['articles'] });
   }
 
   async update(id: number, updateUserInput: UpdateUserInput): Promise<User> {
@@ -49,11 +50,13 @@ export class UsersService {
     return this.userRepository.save(user);
   }
 
-  remove(id: number) {
-    return this.userRepository.delete(id);
+  async remove(id: number): Promise<User> {
+    const user = await this.findOne(id);
+    user['deletedAt'] = new Date();
+    return this.userRepository.save(user);
   }
 
   async findByEmail(email: string): Promise<User|null>{
-    return await this.userRepository.findOne({email});
+    return await this.userRepository.findOne({email, deletedAt: IsNull()});
   }
 }

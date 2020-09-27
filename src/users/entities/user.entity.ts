@@ -12,11 +12,11 @@ export class User {
   id: number;
 
   @Field(() => String, { description: 'Name field' })
-  @Column({length: 50, nullable: false})
+  @Column({length: 50})
   name: string;
 
   @Field(() => String, { description: 'Email field' })
-  @Column({length: 50, nullable:true, unique: true})
+  @Column({length: 50, unique: true})
   email: string;
 
   @Column({nullable: false })
@@ -26,17 +26,22 @@ export class User {
   @Field(() => [Article], { description: 'Articles field' })
   @OneToMany(
     () => Article,
-    (article: Article) => article.user
+    (article: Article) => article.user,
+    {nullable: false}
   )
   articles: Article[];
 
   @Field(() => GraphQLISODateTime, { description: 'createdAt field' })
-  @Column({ type: 'timestamp', nullable: false, default: () => 'CURRENT_TIMESTAMP', })
-  createdAt: Timestamp;
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP', })
+  createdAt: Date;
   
   @Field(() => GraphQLISODateTime, { description: 'updatedAt field' })
-  @Column({ type: 'timestamp', nullable: false, default: () => 'CURRENT_TIMESTAMP', onUpdate: 'CURRENT_TIMESTAMP', })
-  updatedAt: Timestamp;
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP', onUpdate: 'CURRENT_TIMESTAMP', })
+  updatedAt: Date;
+
+  @Exclude()
+  @Column({ type: 'timestamp', nullable: true })
+  deletedAt: Date;
 
   @BeforeInsert()
   async hashPasswordCreate() {

@@ -5,6 +5,8 @@ import { CreateArticleInput } from './dto/create-article.input';
 import { UpdateArticleInput } from './dto/update-article.input';
 import { CurrentUser } from 'src/common/decorators/current-user.decorator';
 import { User } from 'src/users/entities/user.entity';
+import { ArticlePaginationResponse } from './dto/article-pagination.response';
+import { PaginationParam } from 'src/common/dto/pagination.param';
 
 @Resolver(() => Article)
 export class ArticlesResolver {
@@ -15,9 +17,9 @@ export class ArticlesResolver {
     return this.articlesService.create(createArticleInput, currentUser);
   }
 
-  @Query(() => [Article], { name: 'articles' })
-  findAll() {
-    return this.articlesService.findAll();
+  @Query(() => ArticlePaginationResponse, { name: 'articles' })
+  findAll(@Args('param') paginationParam: PaginationParam): Promise<ArticlePaginationResponse> {
+    return this.articlesService.findAll(paginationParam);
   }
 
   @Query(() => Article, { name: 'article' })

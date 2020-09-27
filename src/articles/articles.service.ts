@@ -1,7 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { PaginationParam } from 'src/common/dto/pagination.param';
 import { User } from 'src/users/entities/user.entity';
-import { Repository } from 'typeorm';
+import { IsNull, Like, Repository } from 'typeorm';
+import { ArticlePaginationResponse } from './dto/article-pagination.response';
 import { CreateArticleInput } from './dto/create-article.input';
 import { UpdateArticleInput } from './dto/update-article.input';
 import { Article } from './entities/article.entity';
@@ -18,19 +20,40 @@ export class ArticlesService {
     return this.articleRepository.save(article);
   }
 
-  findAll() {
-    return `This action returns all articles`;
+  async findAll(paginationParam: PaginationParam): Promise <ArticlePaginationResponse> {
+    const { q = '', limit, offset, orderBy='createdAt', orderType='DESC' } = paginationParam
+    const [list, count] = await this.articleRepository.findAndCount({
+      relations: ['user'],
+      where: [{ title: Like(`%${q}%`), deletedAt: IsNull() }, { description: Like(`%${q}%`), deletedAt: IsNull() }],
+      skip: offset,
+      take: limit,
+      order: {
+        [orderBy]: orderType
+      },
+    });
+    return {
+      count,
+      list
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} article`;
+  findOne(id: number): Promise<Article> {
+    return this.articleRepository.findOne({id, deletedAt: IsNull()}, { relations: ['user'] });
   }
 
-  update(id: number, updateArticleInput: UpdateArticleInput) {
-    return `This action updates a #${id} article`;
+  async update(id: number, updateArticleInput: UpdateArticleInput): Promise<Article> {
+    const article = await this.findOne(id);
+    for (const key in updateArticleInput) {
+      if (Object.prototype.hasOwnProperty.call(updateArticleInput, key)) {
+        article[key] = updateArticleInput[key];
+      }
+    }
+    return this.articleRepository.save(article);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} article`;
+  async remove(id: number): Promise<Article> {
+    const article = await this.findOne(id);
+    article['deletedAt'] = new Date();
+    return this.articleRepository.save(article);
   }
 }
