@@ -12,9 +12,6 @@ type User {
   """Email field"""
   email: String!
 
-  """Password field"""
-  password: String!
-
   """createdAt field"""
   createdAt: DateTime!
 

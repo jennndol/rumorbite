@@ -1,6 +1,7 @@
 import { ObjectType, Field, Int, GraphQLISODateTime } from '@nestjs/graphql';
 import { BeforeInsert, BeforeUpdate, Column, Entity, PrimaryGeneratedColumn, Timestamp } from 'typeorm';
 import * as bcrypt from 'bcrypt';
+import { Exclude } from 'class-transformer';
 
 @Entity()
 @ObjectType()
@@ -17,8 +18,8 @@ export class User {
   @Column({length: 50, nullable:true, unique: true})
   email: string;
 
-  @Field(() => String, { description: 'Password field' })
   @Column({nullable: false })
+  @Exclude()
   password: string;
 
   @Field(() => GraphQLISODateTime, { description: 'createdAt field' })
