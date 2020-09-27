@@ -11,8 +11,7 @@ import { User } from './entities/user.entity';
 export class UsersService {
   constructor(
     @InjectRepository(User)
-    private readonly userRepository: Repository<User>
-  ){}
+    private readonly userRepository: Repository<User>  ){}
 
   create(createUserInput: CreateUserInput): Promise<User> {
     const user = this.userRepository.create(createUserInput);
@@ -51,5 +50,9 @@ export class UsersService {
 
   remove(id: number) {
     return this.userRepository.delete(id);
+  }
+
+  async findByEmail(email: string): Promise<User|null>{
+    return await this.userRepository.findOne({email});
   }
 }

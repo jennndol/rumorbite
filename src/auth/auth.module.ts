@@ -1,17 +1,18 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { APP_GUARD } from '@nestjs/core';
 import { JwtModule } from '@nestjs/jwt';
-import { ApiKeyGuard } from './guards/api-key.guard';
+import { UsersModule } from 'src/users/users.module';
+import { AuthResolver } from './auth.resolver';
+import { AuthService } from './auth.service';
 
 @Module({
-  imports: [ConfigModule, JwtModule.registerAsync({
+  imports: [UsersModule, JwtModule.registerAsync({
     imports: [ConfigModule],
     useFactory: async (configService: ConfigService) => ({
       secret: configService.get('JWT_SECRET'),
     }),
     inject: [ConfigService],
   })],
-  providers: [{ provide: APP_GUARD, useClass: ApiKeyGuard }]
+  providers: [AuthResolver, AuthService]
 })
-export class CommonModule {}
+export class AuthModule {}

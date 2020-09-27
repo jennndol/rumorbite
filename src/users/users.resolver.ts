@@ -5,7 +5,8 @@ import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { PaginationParam } from 'src/common/dto/pagination.param';
 import { UserPaginationResponse } from './dto/user-pagination.response';
-import { Public } from 'src/common/decorators/public.decorator';
+import { Req } from '@nestjs/common';
+import { Request } from 'express';
 
 
 @Resolver(() => User)
@@ -13,11 +14,11 @@ export class UsersResolver {
   constructor(private readonly usersService: UsersService) {}
 
   @Mutation(() => User)
-  createUser(@Args('input') createUserInput: CreateUserInput): Promise<User> {
+  createUser(@Args('input') createUserInput: CreateUserInput, @Req() req: Request): Promise<User> {
+    console.log(req)
     return this.usersService.create(createUserInput);
   }
 
-  @Public()
   @Query(() => UserPaginationResponse, { name: 'users' })
   findAll(@Args('param') paginationParam: PaginationParam): Promise<UserPaginationResponse> {
     return this.usersService.findAll(paginationParam)
