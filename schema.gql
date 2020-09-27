@@ -2,15 +2,18 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type User {
+type Article {
   """Id field"""
   id: Int!
 
-  """Name field"""
-  name: String!
+  """Title field"""
+  title: String!
 
-  """Email field"""
-  email: String!
+  """Description field"""
+  description: String!
+
+  """User field"""
+  user: User!
 
   """createdAt field"""
   createdAt: DateTime!
@@ -24,6 +27,26 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type User {
+  """Id field"""
+  id: Int!
+
+  """Name field"""
+  name: String!
+
+  """Email field"""
+  email: String!
+
+  """Articles field"""
+  articles: [Article!]!
+
+  """createdAt field"""
+  createdAt: DateTime!
+
+  """updatedAt field"""
+  updatedAt: DateTime!
+}
+
 type UserPaginationResponse {
   """Count field"""
   count: Int!
@@ -35,6 +58,8 @@ type UserPaginationResponse {
 type Query {
   users(param: PaginationParam!): UserPaginationResponse!
   user(id: Int!): User!
+  articles: [Article!]!
+  article(id: Int!): Article!
 }
 
 input PaginationParam {
@@ -59,6 +84,9 @@ type Mutation {
   updateUser(input: UpdateUserInput!, id: Int!): User!
   removeUser(id: Int!): User!
   loginUser(input: LoginUserInput!): String!
+  createArticle(input: CreateArticleInput!): Article!
+  updateArticle(input: UpdateArticleInput!): Article!
+  removeArticle(id: Int!): Article!
 }
 
 input CreateUserInput {
@@ -89,4 +117,16 @@ input LoginUserInput {
 
   """Password field"""
   password: String!
+}
+
+input CreateArticleInput {
+  """Title field"""
+  title: String!
+
+  """Description field"""
+  description: String!
+}
+
+input UpdateArticleInput {
+  id: Int!
 }

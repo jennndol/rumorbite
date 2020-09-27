@@ -5,13 +5,15 @@ import { ConfigService } from '@nestjs/config';
 import { Reflector } from '@nestjs/core';
 import { IS_PUBLIC_KEY } from '../decorators/public.decorator';
 import { JwtService } from '@nestjs/jwt';
+import { UsersService } from 'src/users/users.service';
 
 @Injectable()
 export class ApiKeyGuard implements CanActivate {
   constructor(
     private readonly reflector: Reflector,
     private readonly configService: ConfigService,
-    private readonly jwtService: JwtService
+    private readonly jwtService: JwtService,
+    private readonly usersService: UsersService
   ){}
 
   canActivate(
@@ -23,7 +25,8 @@ export class ApiKeyGuard implements CanActivate {
     const { req } = ctx.getContext();
     try {
       const decoded = this.jwtService.verify(req.headers.authorization, { secret: this.configService.get('JWT_SECRET') });
-      req.user = decoded;
+      const user = this.usersService.findOne(decoded.id);
+      req.user = user;
       return true
     } catch (error) {
       throw new ForbiddenException();

@@ -1,7 +1,8 @@
 import { ObjectType, Field, Int, GraphQLISODateTime } from '@nestjs/graphql';
-import { BeforeInsert, BeforeUpdate, Column, Entity, PrimaryGeneratedColumn, Timestamp } from 'typeorm';
+import { BeforeInsert, BeforeUpdate, Column, Entity, OneToMany, PrimaryGeneratedColumn, Timestamp } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { Exclude } from 'class-transformer';
+import { Article } from 'src/articles/entities/article.entity';
 
 @Entity()
 @ObjectType()
@@ -21,6 +22,13 @@ export class User {
   @Column({nullable: false })
   @Exclude()
   password: string;
+
+  @Field(() => [Article], { description: 'Articles field' })
+  @OneToMany(
+    () => Article,
+    (article: Article) => article.user
+  )
+  articles: Article[];
 
   @Field(() => GraphQLISODateTime, { description: 'createdAt field' })
   @Column({ type: 'timestamp', nullable: false, default: () => 'CURRENT_TIMESTAMP', })

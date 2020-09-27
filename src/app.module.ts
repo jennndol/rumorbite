@@ -7,10 +7,10 @@ import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { CommonModule } from './common/common.module';
 import { AuthModule } from './auth/auth.module';
+import { ArticlesModule } from './articles/articles.module';
 
 @Module({
   imports: [
-    UsersModule,
     ConfigModule.forRoot(),
     GraphQLModule.forRoot({
       debug: process.env.GRAPHQL_DEBUG === 'true',
@@ -29,6 +29,8 @@ import { AuthModule } from './auth/auth.module';
     }),
     CommonModule,
     AuthModule,
+    UsersModule,
+    ArticlesModule
   ],
   controllers: [AppController],
   providers: [AppService],

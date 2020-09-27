@@ -21,6 +21,7 @@ export class UsersService {
   async findAll(paginationParam: PaginationParam): Promise <UserPaginationResponse> {
     const { q = '', limit, offset, orderBy='createdAt', orderType='DESC' } = paginationParam
     const [list, count] = await this.userRepository.findAndCount({
+      relations: ['articles'],
       where: [{ name: Like(`%${q}%`) }, { email: Like(`%${q}%`) }],
       skip: offset,
       take: limit,
@@ -35,7 +36,7 @@ export class UsersService {
   }
 
   findOne(id: number): Promise<User> {
-    return this.userRepository.findOne(id);
+    return this.userRepository.findOne(id, { relations: ['articles'] });
   }
 
   async update(id: number, updateUserInput: UpdateUserInput): Promise<User> {

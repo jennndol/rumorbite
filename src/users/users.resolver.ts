@@ -22,8 +22,8 @@ export class UsersResolver {
   }
 
   @Query(() => User, { name: 'user' })
-  findOne(@Args('id', { type: () => Int }) id: number): Promise<User> {
-    return this.usersService.findOne(id);
+  async findOne(@Args('id', { type: () => Int }) id: number): Promise<User> {
+    return await this.usersService.findOne(id);
   }
 
   @Mutation(() => User)
