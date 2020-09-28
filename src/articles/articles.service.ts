@@ -21,7 +21,7 @@ export class ArticlesService {
   }
 
   async findAll(paginationParam: PaginationParam): Promise <ArticlePaginationResponse> {
-    const { q = '', limit, offset, orderBy='createdAt', orderType='DESC' } = paginationParam
+    const { q = '', limit, offset, orderBy='createdAt', orderType='DESC' } = paginationParam;
     const [list, count] = await this.articleRepository.findAndCount({
       relations: ['user'],
       where: [{ title: Like(`%${q}%`), deletedAt: IsNull() }, { description: Like(`%${q}%`), deletedAt: IsNull() }],
@@ -34,12 +34,12 @@ export class ArticlesService {
     return {
       count,
       list
-    }
+    };
   }
 
   async findOne(id: string): Promise<Article> {
     const article = await this.articleRepository.findOne({id, deletedAt: IsNull()}, { relations: ['user'] });
-    if(!article) throw new NotFoundException()
+    if(!article) throw new NotFoundException();
     return article;
   }
 

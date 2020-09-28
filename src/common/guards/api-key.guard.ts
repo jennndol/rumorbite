@@ -27,7 +27,7 @@ export class ApiKeyGuard implements CanActivate {
       const decoded = this.jwtService.verify(req.headers.authorization, { secret: this.configService.get('JWT_SECRET') });
       const user = this.usersService.findOne(decoded.id);
       req.user = user;
-      return true
+      return true;
     } catch (error) {
       throw new ForbiddenException();
     }

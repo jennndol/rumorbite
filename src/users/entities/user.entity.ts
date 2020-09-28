@@ -7,7 +7,7 @@ import { Article } from 'src/articles/entities/article.entity';
 @Entity()
 @ObjectType()
 export class User {
-  @Field(() => String, { description: 'Id field' })
+  @Field(() => String, {description: 'Id field' })
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -15,11 +15,15 @@ export class User {
   @Column({length: 50})
   name: string;
 
+  @Field(() => String, { description: 'Username field' })
+  @Column({length: 50, unique: true})
+  username: string;
+
   @Field(() => String, { description: 'Email field' })
   @Column({length: 50, unique: true})
   email: string;
 
-  @Column({nullable: false })
+  @Column()
   @Exclude()
   password: string;
 

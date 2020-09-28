@@ -34,6 +34,9 @@ type User {
   """Name field"""
   name: String!
 
+  """Username field"""
+  username: String!
+
   """Email field"""
   email: String!
 
@@ -88,24 +91,13 @@ input PaginationParam {
 }
 
 type Mutation {
-  createUser(input: CreateUserInput!): User!
   updateUser(input: UpdateUserInput!, id: String!): User!
   removeUser(id: String!): User!
-  loginUser(input: LoginUserInput!): String!
+  register(input: RegisterUserInput!): User!
+  login(input: LoginUserInput!): String!
   createArticle(input: CreateArticleInput!): Article!
   updateArticle(input: UpdateArticleInput!, id: String!): Article!
   removeArticle(id: String!): Article!
-}
-
-input CreateUserInput {
-  """Name field"""
-  name: String!
-
-  """Password field"""
-  password: String!
-
-  """Email field"""
-  email: String!
 }
 
 input UpdateUserInput {
@@ -119,9 +111,20 @@ input UpdateUserInput {
   email: String
 }
 
-input LoginUserInput {
+input RegisterUserInput {
+  """Name field"""
+  name: String!
+
+  """Password field"""
+  password: String!
+
   """Email field"""
   email: String!
+}
+
+input LoginUserInput {
+  """Username field"""
+  username: String!
 
   """Password field"""
   password: String!
