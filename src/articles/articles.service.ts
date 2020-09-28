@@ -37,11 +37,11 @@ export class ArticlesService {
     }
   }
 
-  findOne(id: number): Promise<Article> {
+  findOne(id: string): Promise<Article> {
     return this.articleRepository.findOne({id, deletedAt: IsNull()}, { relations: ['user'] });
   }
 
-  async update(id: number, updateArticleInput: UpdateArticleInput): Promise<Article> {
+  async update(id: string, updateArticleInput: UpdateArticleInput): Promise<Article> {
     const article = await this.findOne(id);
     for (const key in updateArticleInput) {
       if (Object.prototype.hasOwnProperty.call(updateArticleInput, key)) {
@@ -51,7 +51,7 @@ export class ArticlesService {
     return this.articleRepository.save(article);
   }
 
-  async remove(id: number): Promise<Article> {
+  async remove(id: string): Promise<Article> {
     const article = await this.findOne(id);
     article['deletedAt'] = new Date();
     return this.articleRepository.save(article);

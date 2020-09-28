@@ -4,7 +4,7 @@
 
 type Article {
   """Id field"""
-  id: Int!
+  id: String!
 
   """Title field"""
   title: String!
@@ -29,7 +29,7 @@ scalar DateTime
 
 type User {
   """Id field"""
-  id: Int!
+  id: String!
 
   """Name field"""
   name: String!
@@ -65,9 +65,9 @@ type ArticlePaginationResponse {
 
 type Query {
   users(param: PaginationParam!): UserPaginationResponse!
-  user(id: Int!): User!
+  user(id: String!): User!
   articles(param: PaginationParam!): ArticlePaginationResponse!
-  article(id: Int!): Article!
+  article(id: String!): Article!
 }
 
 input PaginationParam {
@@ -89,12 +89,12 @@ input PaginationParam {
 
 type Mutation {
   createUser(input: CreateUserInput!): User!
-  updateUser(input: UpdateUserInput!, id: Int!): User!
-  removeUser(id: Int!): User!
+  updateUser(input: UpdateUserInput!, id: String!): User!
+  removeUser(id: String!): User!
   loginUser(input: LoginUserInput!): String!
   createArticle(input: CreateArticleInput!): Article!
-  updateArticle(input: UpdateArticleInput!): Article!
-  removeArticle(id: Int!): Article!
+  updateArticle(input: UpdateArticleInput!, id: String!): Article!
+  removeArticle(id: String!): Article!
 }
 
 input CreateUserInput {
@@ -136,5 +136,9 @@ input CreateArticleInput {
 }
 
 input UpdateArticleInput {
-  id: Int!
+  """Title field"""
+  title: String
+
+  """Description field"""
+  description: String
 }

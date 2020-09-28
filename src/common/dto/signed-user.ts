@@ -1,3 +1,3 @@
 export interface SignedUser{
-    id: number
+    id: string
 }

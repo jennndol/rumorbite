@@ -1,4 +1,4 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { ArticlesService } from './articles.service';
 import { Article } from './entities/article.entity';
 import { CreateArticleInput } from './dto/create-article.input';
@@ -23,17 +23,17 @@ export class ArticlesResolver {
   }
 
   @Query(() => Article, { name: 'article' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
+  findOne(@Args('id', { type: () => String }) id: string) {
     return this.articlesService.findOne(id);
   }
 
   @Mutation(() => Article)
-  updateArticle(@Args('input') updateArticleInput: UpdateArticleInput) {
-    return this.articlesService.update(updateArticleInput.id, updateArticleInput);
+  updateArticle(@Args('id', { type: () => String }) id: string, @Args('input') updateArticleInput: UpdateArticleInput) {
+    return this.articlesService.update(id, updateArticleInput);
   }
 
   @Mutation(() => Article)
-  removeArticle(@Args('id', { type: () => Int }) id: number) {
+  removeArticle(@Args('id', { type: () => String }) id: string) {
     return this.articlesService.remove(id);
   }
 }

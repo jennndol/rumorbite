@@ -36,11 +36,11 @@ export class UsersService {
     }
   }
 
-  findOne(id: number): Promise<User> {
+  findOne(id: string): Promise<User> {
     return this.userRepository.findOne({id, deletedAt: IsNull()}, { relations: ['articles'] });
   }
 
-  async update(id: number, updateUserInput: UpdateUserInput): Promise<User> {
+  async update(id: string, updateUserInput: UpdateUserInput): Promise<User> {
     const user = await this.findOne(id);
     for (const key in updateUserInput) {
       if (Object.prototype.hasOwnProperty.call(updateUserInput, key)) {
@@ -50,9 +50,9 @@ export class UsersService {
     return this.userRepository.save(user);
   }
 
-  async remove(id: number): Promise<User> {
+  async remove(id: string): Promise<User> {
     const user = await this.findOne(id);
-    user['deletedAt'] = new Date();
+    user.deletedAt = new Date();
     return this.userRepository.save(user);
   }
 

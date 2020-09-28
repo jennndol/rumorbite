@@ -1,5 +1,5 @@
-import { ObjectType, Field, Int, GraphQLISODateTime } from '@nestjs/graphql';
-import { BeforeInsert, BeforeUpdate, Column, Entity, OneToMany, PrimaryGeneratedColumn, Timestamp } from 'typeorm';
+import { ObjectType, Field, GraphQLISODateTime } from '@nestjs/graphql';
+import { BeforeInsert, BeforeUpdate, Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { Exclude } from 'class-transformer';
 import { Article } from 'src/articles/entities/article.entity';
@@ -7,9 +7,9 @@ import { Article } from 'src/articles/entities/article.entity';
 @Entity()
 @ObjectType()
 export class User {
-  @Field(() => Int, { description: 'Id field' })
-  @PrimaryGeneratedColumn()
-  id: number;
+  @Field(() => String, { description: 'Id field' })
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Field(() => String, { description: 'Name field' })
   @Column({length: 50})
