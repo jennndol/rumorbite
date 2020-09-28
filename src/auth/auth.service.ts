@@ -12,16 +12,22 @@ export class AuthService {
         private jwtService: JwtService
   ) {}
 
+  async verifyPassword(plaintext, password){
+    const isVerified = await compare(plaintext, password);
+    if (!isVerified) throw new UnauthorizedException();
+    return isVerified;
+  }
+
+  generateToken(signedUser: SignedUser){
+    return this.jwtService.sign(signedUser);
+  }
+
   async login(email: string, password: string): Promise < string > {
     try {
       const user = await this.usersService.findByEmail(email);
-      const isVerified = await compare(password, user.password);
-      if (!isVerified) throw new UnauthorizedException();
-      const signedUser: SignedUser = {
-        id: user.id
-      }
-      const token = this.jwtService.sign(signedUser);
-      return token   
+      await this.verifyPassword(password, user.password);
+      const token = this.generateToken({id: user.id});
+      return token;
     } catch (error) {
       throw new UnauthorizedException();
     }

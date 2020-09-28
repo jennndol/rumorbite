@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PaginationParam } from 'src/common/dto/pagination.param';
 import { IsNull, Like, Repository } from 'typeorm';
@@ -14,8 +14,8 @@ export class UsersService {
     private readonly userRepository: Repository<User>
   ){}
 
-  create(createUserInput: CreateUserInput): Promise<User> {
-    const user = this.userRepository.create(createUserInput);
+  async create(createUserInput: CreateUserInput): Promise<User> {
+    const user = await this.userRepository.create(createUserInput);
     return this.userRepository.save(user); 
   }
 
@@ -36,8 +36,10 @@ export class UsersService {
     }
   }
 
-  findOne(id: string): Promise<User> {
-    return this.userRepository.findOne({id, deletedAt: IsNull()}, { relations: ['articles'] });
+  async findOne(id: string): Promise<User> {
+    const user = await this.userRepository.findOne({id, deletedAt: IsNull()}, { relations: ['articles'] });
+    if(!user) throw new NotFoundException();
+    return user;
   }
 
   async update(id: string, updateUserInput: UpdateUserInput): Promise<User> {
@@ -56,7 +58,9 @@ export class UsersService {
     return this.userRepository.save(user);
   }
 
-  async findByEmail(email: string): Promise<User|null>{
-    return await this.userRepository.findOne({email, deletedAt: IsNull()});
+  async findByEmail(email: string): Promise<User>{
+    const user = await this.userRepository.findOne({email, deletedAt: IsNull()});
+    if(!user) throw new NotFoundException();
+    return user;
   }
 }

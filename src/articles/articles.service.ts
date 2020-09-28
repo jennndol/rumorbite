@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PaginationParam } from 'src/common/dto/pagination.param';
 import { User } from 'src/users/entities/user.entity';
@@ -15,8 +15,8 @@ export class ArticlesService {
     private readonly articleRepository: Repository<Article>  ){}
 
 
-  create(createArticleInput: CreateArticleInput, currentUser: User): Promise<Article> {
-    const article = this.articleRepository.create({...createArticleInput, user: currentUser});
+  async create(createArticleInput: CreateArticleInput, currentUser: User): Promise<Article> {
+    const article = await this.articleRepository.create({...createArticleInput, user: currentUser});
     return this.articleRepository.save(article);
   }
 
@@ -37,8 +37,10 @@ export class ArticlesService {
     }
   }
 
-  findOne(id: string): Promise<Article> {
-    return this.articleRepository.findOne({id, deletedAt: IsNull()}, { relations: ['user'] });
+  async findOne(id: string): Promise<Article> {
+    const article = await this.articleRepository.findOne({id, deletedAt: IsNull()}, { relations: ['user'] });
+    if(!article) throw new NotFoundException()
+    return article;
   }
 
   async update(id: string, updateArticleInput: UpdateArticleInput): Promise<Article> {
@@ -53,7 +55,7 @@ export class ArticlesService {
 
   async remove(id: string): Promise<Article> {
     const article = await this.findOne(id);
-    article['deletedAt'] = new Date();
+    article.deletedAt = new Date();
     return this.articleRepository.save(article);
   }
 }

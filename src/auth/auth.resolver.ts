@@ -11,7 +11,7 @@ export class AuthResolver {
 @Public()
   @Mutation(() => String)
   loginUser(@Args('input') loginUserInput: LoginUserInput): Promise<string> {
-    const {email, password} = loginUserInput;
+    const { email, password } = loginUserInput;
     return this.authService.login(email, password);
   }
 
