@@ -23,7 +23,7 @@ export class UsersService {
     const { q = '', limit, offset, orderBy='createdAt', orderType='DESC' } = paginationParam;
     const [list, count] = await this.userRepository.findAndCount({
       relations: ['articles'],
-      where: [{ name: Like(`%${q}%`), deletedAt: IsNull()}, { email: Like(`%${q}%`), deletedAt: IsNull()}],
+      where: [{ name: Like(`%${q}%`), deletedAt: IsNull() }, { email: Like(`%${q}%`), deletedAt: IsNull() }],
       skip: offset,
       take: limit,
       order: {
@@ -37,7 +37,7 @@ export class UsersService {
   }
 
   async findOne(id: string): Promise<User> {
-    const user = await this.userRepository.findOne({id, deletedAt: IsNull()}, { relations: ['articles'] });
+    const user = await this.userRepository.findOne({ id, deletedAt: IsNull() }, { relations: ['articles'] });
     if(!user) throw new NotFoundException();
     return user;
   }
@@ -60,7 +60,7 @@ export class UsersService {
 
   async findByEmailOrUsername(username: string): Promise<User>{
     const user = await this.userRepository.findOne({
-      where: [{username: username}, {email: username}]
+      where: [{ username: username }, { email: username }]
     });
     if(!user) throw new NotFoundException();
     if (user.deletedAt){

@@ -1,11 +1,11 @@
 import { Injectable, UnauthorizedException } from "@nestjs/common";
-import { UsersService } from "src/users/users.service";
-import { compare } from 'bcrypt';
 import { JwtService } from "@nestjs/jwt";
+import { compare } from 'bcrypt';
 import { SignedUser } from "src/common/dto/signed-user";
 import { User } from "src/users/entities/user.entity";
-import { RegisterUserInput } from "./dto/register-user.input";
+import { UsersService } from "src/users/users.service";
 import { LoginUserInput } from "./dto/login-user.input";
+import { RegisterUserInput } from "./dto/register-user.input";
 
 
 @Injectable()
@@ -34,7 +34,7 @@ export class AuthService {
       const { username, password } = loginUserInput;
       const user = await this.usersService.findByEmailOrUsername(username);
       await this.verifyPassword(password, user.password);
-      const token = this.generateToken({id: user.id});
+      const token = this.generateToken({ id: user.id });
       return token;
     } catch (error) {
       throw new UnauthorizedException();

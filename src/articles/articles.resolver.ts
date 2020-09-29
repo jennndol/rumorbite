@@ -1,12 +1,12 @@
-import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { CurrentUser } from 'src/common/decorators/current-user.decorator';
+import { PaginationParam } from 'src/common/dto/pagination.param';
+import { User } from 'src/users/entities/user.entity';
 import { ArticlesService } from './articles.service';
-import { Article } from './entities/article.entity';
+import { ArticlePaginationResponse } from './dto/article-pagination.response';
 import { CreateArticleInput } from './dto/create-article.input';
 import { UpdateArticleInput } from './dto/update-article.input';
-import { CurrentUser } from 'src/common/decorators/current-user.decorator';
-import { User } from 'src/users/entities/user.entity';
-import { ArticlePaginationResponse } from './dto/article-pagination.response';
-import { PaginationParam } from 'src/common/dto/pagination.param';
+import { Article } from './entities/article.entity';
 
 @Resolver(() => Article)
 export class ArticlesResolver {

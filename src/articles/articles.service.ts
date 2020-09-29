@@ -12,11 +12,12 @@ import { Article } from './entities/article.entity';
 export class ArticlesService {
   constructor(
     @InjectRepository(Article)
-    private readonly articleRepository: Repository<Article>  ){}
+    private readonly articleRepository: Repository<Article>
+  ){}
 
 
   async create(createArticleInput: CreateArticleInput, currentUser: User): Promise<Article> {
-    const article = await this.articleRepository.create({...createArticleInput, user: currentUser});
+    const article = await this.articleRepository.create({ ...createArticleInput, user: currentUser });
     return this.articleRepository.save(article);
   }
 
@@ -38,7 +39,7 @@ export class ArticlesService {
   }
 
   async findOne(id: string): Promise<Article> {
-    const article = await this.articleRepository.findOne({id, deletedAt: IsNull()}, { relations: ['user'] });
+    const article = await this.articleRepository.findOne({ id, deletedAt: IsNull() }, { relations: ['user'] });
     if(!article) throw new NotFoundException();
     return article;
   }

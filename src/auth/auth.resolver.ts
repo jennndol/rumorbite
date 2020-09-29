@@ -1,4 +1,4 @@
-import { Resolver, Mutation, Args } from '@nestjs/graphql';
+import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { Public } from 'src/common/decorators/public.decorator';
 import { User } from 'src/users/entities/user.entity';
 import { AuthService } from './auth.service';

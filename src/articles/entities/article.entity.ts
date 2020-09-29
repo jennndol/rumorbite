@@ -1,7 +1,7 @@
-import { ObjectType, Field, GraphQLISODateTime } from '@nestjs/graphql';
+import { Field, GraphQLISODateTime, ObjectType } from '@nestjs/graphql';
+import { Exclude } from 'class-transformer';
 import { User } from 'src/users/entities/user.entity';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { Exclude } from 'class-transformer';
 
 @Entity()
 @ObjectType()
@@ -11,18 +11,18 @@ export class Article {
   id: string;
 
   @Field(() => String, { description: 'Title field' })
-  @Column({length: 100 })
+  @Column({ length: 100 })
   title: string;
 
   @Field(() => String, { description: 'Description field' })
-  @Column({type: 'text'})
+  @Column({ type: 'text' })
   description: string;
 
   @Field(() => User, { description: 'User field' })
   @ManyToOne(
     () => User,
     (user: User) => user.articles,
-    {nullable: false}
+    { nullable: false }
   )
   user: User;
 
