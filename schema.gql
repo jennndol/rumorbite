@@ -50,14 +50,6 @@ type User {
   updatedAt: DateTime!
 }
 
-type UserPaginationResponse {
-  """Count field"""
-  count: Int!
-
-  """Users field"""
-  list: [User!]!
-}
-
 type ArticlePaginationResponse {
   """Count field"""
   count: Int!
@@ -66,11 +58,19 @@ type ArticlePaginationResponse {
   list: [Article!]!
 }
 
+type UserPaginationResponse {
+  """Count field"""
+  count: Int!
+
+  """Users field"""
+  list: [User!]!
+}
+
 type Query {
-  users(param: PaginationParam!): UserPaginationResponse!
-  user(id: String!): User!
   articles(param: PaginationParam!): ArticlePaginationResponse!
   article(id: String!): Article!
+  users(param: PaginationParam!): UserPaginationResponse!
+  user(id: String!): User!
 }
 
 input PaginationParam {
@@ -91,43 +91,13 @@ input PaginationParam {
 }
 
 type Mutation {
+  createArticle(input: CreateArticleInput!): Article!
+  updateArticle(input: UpdateArticleInput!, id: String!): Article!
+  removeArticle(id: String!): Article!
   updateUser(input: UpdateUserInput!, id: String!): User!
   removeUser(id: String!): User!
   register(input: RegisterUserInput!): User!
   login(input: LoginUserInput!): String!
-  createArticle(input: CreateArticleInput!): Article!
-  updateArticle(input: UpdateArticleInput!, id: String!): Article!
-  removeArticle(id: String!): Article!
-}
-
-input UpdateUserInput {
-  """Name field"""
-  name: String
-
-  """Password field"""
-  password: String
-
-  """Email field"""
-  email: String
-}
-
-input RegisterUserInput {
-  """Name field"""
-  name: String!
-
-  """Password field"""
-  password: String!
-
-  """Email field"""
-  email: String!
-}
-
-input LoginUserInput {
-  """Username field"""
-  username: String!
-
-  """Password field"""
-  password: String!
 }
 
 input CreateArticleInput {
@@ -144,4 +114,40 @@ input UpdateArticleInput {
 
   """Description field"""
   description: String
+}
+
+input UpdateUserInput {
+  """Name field"""
+  name: String
+
+  """Password field"""
+  password: String
+
+  """Email field"""
+  email: String
+
+  """Username field"""
+  username: String
+}
+
+input RegisterUserInput {
+  """Name field"""
+  name: String!
+
+  """Password field"""
+  password: String!
+
+  """Email field"""
+  email: String!
+
+  """Username field"""
+  username: String!
+}
+
+input LoginUserInput {
+  """Username field"""
+  username: String!
+
+  """Password field"""
+  password: String!
 }
