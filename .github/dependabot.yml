@@ -5,6 +5,7 @@ updates:
   schedule:
     interval: daily
     time: '00:00'
+  target-branch: "development"
   open-pull-requests-limit: 99
   reviewers:
     - jennndol
