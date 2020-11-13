@@ -65,7 +65,7 @@ export class UsersService {
     if(!user) throw new NotFoundException();
     if (user.deletedAt){
       user.deletedAt = null;
-      this.userRepository.save(user);
+      await this.userRepository.save(user);
     }
     return user;
   }
