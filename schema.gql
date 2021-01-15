@@ -67,10 +67,10 @@ type UserPaginationResponse {
 }
 
 type Query {
-  articles(param: PaginationParam!): ArticlePaginationResponse!
-  article(id: String!): Article!
   users(param: PaginationParam!): UserPaginationResponse!
   user(id: String!): User!
+  articles(param: PaginationParam!): ArticlePaginationResponse!
+  article(id: String!): Article!
 }
 
 input PaginationParam {
@@ -91,29 +91,13 @@ input PaginationParam {
 }
 
 type Mutation {
-  createArticle(input: CreateArticleInput!): Article!
-  updateArticle(input: UpdateArticleInput!, id: String!): Article!
-  removeArticle(id: String!): Article!
   updateUser(input: UpdateUserInput!, id: String!): User!
   removeUser(id: String!): User!
   register(input: RegisterUserInput!): User!
   login(input: LoginUserInput!): String!
-}
-
-input CreateArticleInput {
-  """Title field"""
-  title: String!
-
-  """Description field"""
-  description: String!
-}
-
-input UpdateArticleInput {
-  """Title field"""
-  title: String
-
-  """Description field"""
-  description: String
+  createArticle(input: CreateArticleInput!): Article!
+  updateArticle(input: UpdateArticleInput!, id: String!): Article!
+  removeArticle(id: String!): Article!
 }
 
 input UpdateUserInput {
@@ -150,4 +134,20 @@ input LoginUserInput {
 
   """Password field"""
   password: String!
+}
+
+input CreateArticleInput {
+  """Title field"""
+  title: String!
+
+  """Description field"""
+  description: String!
+}
+
+input UpdateArticleInput {
+  """Title field"""
+  title: String
+
+  """Description field"""
+  description: String
 }
