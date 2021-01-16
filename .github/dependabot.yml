@@ -4,16 +4,5 @@ updates:
   directory: "/"
   schedule:
     interval: daily
-    time: '00:00'
-  target-branch: "development"
-  open-pull-requests-limit: 99
-  reviewers:
-    - jennndol
-  assignees:
-    - jennndol
-  labels:
-    - dependencies
-  commit-message:
-    prefix: fix
-    prefix-development: chore
-    include: scope
+    time: "22:00"
+  open-pull-requests-limit: 10
