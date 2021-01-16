@@ -8,6 +8,8 @@ async function bootstrap() {
   app.useGlobalInterceptors(new TransformInterceptor());
   app.useGlobalPipes(new ValidationPipe());
   app.enableCors();
-  await app.listen(3000);
+  await app.listen(parseInt(process.env.PORT), function(){
+    console.info(`Nest application is running on port ${process.env.PORT}`);
+  });
 }
 bootstrap();
