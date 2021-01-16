@@ -9,7 +9,7 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
   app.enableCors();
   await app.listen(parseInt(process.env.PORT), function(){
-	console.info(`Nest application is running on port ${process.env.PORT}`);
+    console.info(`Nest application is running on port ${process.env.PORT}`);
   });
 }
 bootstrap();
