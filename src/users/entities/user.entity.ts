@@ -1,9 +1,16 @@
 import { Field, GraphQLISODateTime, ObjectType } from '@nestjs/graphql';
 import { Exclude } from 'class-transformer';
-import { Article } from 'src/articles/entities/article.entity';
-import { salt, sign } from 'src/common/utils/password';
-import { BeforeInsert, BeforeUpdate, Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  BeforeInsert,
+  BeforeUpdate,
+  Column,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
+import { Article } from '../../articles/entities/article.entity';
+import { salt, sign } from '../../common/utils/password';
 
 @Entity()
 @ObjectType()
@@ -29,19 +36,21 @@ export class User {
   password: string;
 
   @Field(() => [Article], { description: 'Articles field' })
-  @OneToMany(
-    () => Article,
-    (article: Article) => article.user,
-    { nullable: false }
-  )
+  @OneToMany(() => Article, (article: Article) => article.user, {
+    nullable: false,
+  })
   articles: Article[];
 
   @Field(() => GraphQLISODateTime, { description: 'createdAt field' })
-  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP', })
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
-  
+
   @Field(() => GraphQLISODateTime, { description: 'updatedAt field' })
-  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP', onUpdate: 'CURRENT_TIMESTAMP', })
+  @Column({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP',
+    onUpdate: 'CURRENT_TIMESTAMP',
+  })
   updatedAt: Date;
 
   @Exclude()
@@ -56,7 +65,7 @@ export class User {
 
   @BeforeUpdate()
   hashPasswordUpdate(): void {
-    if(this.password) {
+    if (this.password) {
       const generatedSalt = salt(parseInt(process.env.HASH_SALT_ROUNDS));
       this.password = sign(this.password, generatedSalt);
     }

@@ -1,9 +1,11 @@
 import * as crypto from 'crypto';
 
-
-export function salt (rounds: number): string {
-  return crypto.randomBytes(Math.ceil(rounds / 2)).toString('hex').slice(0, rounds);
-};
+export function salt(rounds: number): string {
+  return crypto
+    .randomBytes(Math.ceil(rounds / 2))
+    .toString('hex')
+    .slice(0, rounds);
+}
 
 export function sign(password: string, salt: string): string {
   const hmac = crypto.createHmac(process.env.HASH_ALGORITHM, salt);
