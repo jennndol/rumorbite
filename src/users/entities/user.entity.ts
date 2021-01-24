@@ -49,13 +49,13 @@ export class User {
   deletedAt: Date;
 
   @BeforeInsert()
-  hashPasswordCreate() {
+  hashPasswordCreate(): void {
     const generatedSalt = salt(parseInt(process.env.HASH_SALT_ROUNDS));
     this.password = sign(this.password, generatedSalt);
   }
 
   @BeforeUpdate()
-  hashPasswordUpdate() {
+  hashPasswordUpdate(): void {
     if(this.password) {
       const generatedSalt = salt(parseInt(process.env.HASH_SALT_ROUNDS));
       this.password = sign(this.password, generatedSalt);

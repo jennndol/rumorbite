@@ -37,7 +37,7 @@ import { UsersModule } from './users/users.module';
   providers: [AppService, Logger],
 })
 export class AppModule {
-  configure(consumer: MiddlewareConsumer){
+  configure(consumer: MiddlewareConsumer): void{
     consumer.apply(LoggerMiddleware).forRoutes({ path: '*', method: RequestMethod.ALL });
   }
 }

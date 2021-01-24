@@ -66,6 +66,11 @@ type UserPaginationResponse {
   list: [User!]!
 }
 
+type LoginUserResponse {
+  """Token field"""
+  token: String!
+}
+
 type Query {
   users(param: PaginationParam!): UserPaginationResponse!
   user(id: String!): User!
@@ -94,7 +99,7 @@ type Mutation {
   updateUser(input: UpdateUserInput!, id: String!): User!
   removeUser(id: String!): User!
   register(input: RegisterUserInput!): User!
-  login(input: LoginUserInput!): String!
+  login(input: LoginUserInput!): LoginUserResponse!
   createArticle(input: CreateArticleInput!): Article!
   updateArticle(input: UpdateArticleInput!, id: String!): Article!
   removeArticle(id: String!): Article!

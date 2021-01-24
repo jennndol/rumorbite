@@ -6,7 +6,7 @@ import { Logger } from '../services/logger.service';
 export class LoggerMiddleware implements NestMiddleware {
   constructor(private logger: Logger) {}
 
-  use(req: Request, res: Response, next: NextFunction) {
+  use(req: Request, res: Response, next: NextFunction): void {
     this.logger.log(`Request ${req.url} from ${req.ip} ${req.hostname} using ${req.headers['user-agent']} - [${req.method}]`);
     res.on('close', () => {
       this.logger.log(`Response ${req.url} from ${req.ip} ${req.hostname} - ${res.statusCode}`);
