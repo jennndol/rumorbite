@@ -1,7 +1,7 @@
 import { Injectable, UnauthorizedException } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
-import { compare } from 'bcrypt';
 import { SignedUser } from "src/common/dto/signed-user";
+import { compare } from "src/common/utils/password";
 import { User } from "src/users/entities/user.entity";
 import { UsersService } from "src/users/users.service";
 import { LoginUserInput } from "./dto/login-user.input";
@@ -12,11 +12,11 @@ import { RegisterUserInput } from "./dto/register-user.input";
 export class AuthService {
   constructor(
         private usersService: UsersService,
-        private jwtService: JwtService
+        private jwtService: JwtService,
   ) {}
 
-  async verifyPassword(plaintext, password){
-    const isVerified = await compare(plaintext, password);
+  verifyPassword(plaintext: string, password: string): boolean{
+    const isVerified = compare(plaintext, password);
     if (!isVerified) throw new UnauthorizedException();
     return isVerified;
   }
