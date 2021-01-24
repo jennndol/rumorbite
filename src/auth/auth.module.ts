@@ -6,13 +6,16 @@ import { AuthResolver } from './auth.resolver';
 import { AuthService } from './auth.service';
 
 @Module({
-  imports: [UsersModule, JwtModule.registerAsync({
-    imports: [ConfigModule],
-    useFactory: async (configService: ConfigService) => ({
-      secret: configService.get('JWT_SECRET'),
+  imports: [
+    UsersModule,
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        secret: configService.get('JWT_SECRET'),
+      }),
+      inject: [ConfigService],
     }),
-    inject: [ConfigService],
-  })],
-  providers: [AuthResolver, AuthService]
+  ],
+  providers: [AuthResolver, AuthService],
 })
 export class AuthModule {}

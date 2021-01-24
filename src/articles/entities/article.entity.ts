@@ -19,19 +19,19 @@ export class Article {
   description: string;
 
   @Field(() => User, { description: 'User field' })
-  @ManyToOne(
-    () => User,
-    (user: User) => user.articles,
-    { nullable: false }
-  )
+  @ManyToOne(() => User, (user: User) => user.articles, { nullable: false })
   user: User;
 
   @Field(() => GraphQLISODateTime, { description: 'createdAt field' })
-  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP', })
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
-  
+
   @Field(() => GraphQLISODateTime, { description: 'updatedAt field' })
-  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP', onUpdate: 'CURRENT_TIMESTAMP', })
+  @Column({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP',
+    onUpdate: 'CURRENT_TIMESTAMP',
+  })
   updatedAt: Date;
 
   @Exclude()

@@ -13,12 +13,17 @@ export class ArticlesResolver {
   constructor(private readonly articlesService: ArticlesService) {}
 
   @Mutation(() => Article)
-  createArticle(@Args('input') createArticleInput: CreateArticleInput, @CurrentUser() currentUser: User): Promise<Article> {
+  createArticle(
+    @Args('input') createArticleInput: CreateArticleInput,
+    @CurrentUser() currentUser: User,
+  ): Promise<Article> {
     return this.articlesService.create(createArticleInput, currentUser);
   }
 
   @Query(() => ArticlePaginationResponse, { name: 'articles' })
-  findAll(@Args('param') paginationParam: PaginationParam): Promise<ArticlePaginationResponse> {
+  findAll(
+    @Args('param') paginationParam: PaginationParam,
+  ): Promise<ArticlePaginationResponse> {
     return this.articlesService.findAll(paginationParam);
   }
 
@@ -28,12 +33,17 @@ export class ArticlesResolver {
   }
 
   @Mutation(() => Article)
-  updateArticle(@Args('id', { type: () => String }) id: string, @Args('input') updateArticleInput: UpdateArticleInput): Promise<Article> {
+  updateArticle(
+    @Args('id', { type: () => String }) id: string,
+    @Args('input') updateArticleInput: UpdateArticleInput,
+  ): Promise<Article> {
     return this.articlesService.update(id, updateArticleInput);
   }
 
   @Mutation(() => Article)
-  removeArticle(@Args('id', { type: () => String }) id: string): Promise<Article> {
+  removeArticle(
+    @Args('id', { type: () => String }) id: string,
+  ): Promise<Article> {
     return this.articlesService.remove(id);
   }
 }
