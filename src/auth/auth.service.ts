@@ -21,7 +21,7 @@ export class AuthService {
     return isVerified;
   }
 
-  generateToken(signedUser: SignedUser){
+  generateToken(signedUser: SignedUser): string{
     return this.jwtService.sign(signedUser);
   }
 
@@ -29,13 +29,12 @@ export class AuthService {
     return this.usersService.create(registerUserInput);
   }
 
-  async login(loginUserInput: LoginUserInput): Promise < string > {
+  async login(loginUserInput: LoginUserInput): Promise <string> {
     try {
       const { username, password } = loginUserInput;
       const user = await this.usersService.findByEmailOrUsername(username);
-      await this.verifyPassword(password, user.password);
-      const token = this.generateToken({ id: user.id });
-      return token;
+      this.verifyPassword(password, user.password);
+      return this.generateToken({ id: user.id });
     } catch (error) {
       throw new UnauthorizedException();
     }
