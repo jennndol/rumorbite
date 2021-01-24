@@ -6,7 +6,7 @@ import { Logger } from './common/services/logger.service';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
-    logger: process.env.ENV == 'development' || new Logger()
+    logger: process.env.NODE_ENV == 'development' || new Logger()
   });
   app.useGlobalInterceptors(new TransformInterceptor());
   app.useGlobalPipes(new ValidationPipe());
