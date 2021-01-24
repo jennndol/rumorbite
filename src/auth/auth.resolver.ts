@@ -3,6 +3,7 @@ import { Public } from 'src/common/decorators/public.decorator';
 import { User } from 'src/users/entities/user.entity';
 import { AuthService } from './auth.service';
 import { LoginUserInput } from './dto/login-user.input';
+import { LoginUserResponse } from './dto/login-user.response';
 import { RegisterUserInput } from './dto/register-user.input';
 
 
@@ -19,9 +20,10 @@ export class AuthResolver {
   }
 
   @Public()
-  @Mutation(() => String)
-  login(@Args('input') loginUserInput: LoginUserInput): Promise<string> {
-    return this.authService.login(loginUserInput);
+  @Mutation(() => LoginUserResponse)
+  async login(@Args('input') loginUserInput: LoginUserInput): Promise<LoginUserResponse> {
+    const token = await this.authService.login(loginUserInput);
+    return { token };
   }
 
 }
