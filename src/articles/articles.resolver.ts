@@ -1,7 +1,8 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { CurrentUser } from 'src/common/decorators/current-user.decorator';
-import { PaginationParam } from 'src/common/dto/pagination.param';
-import { User } from 'src/users/entities/user.entity';
+
+import { CurrentUser } from '../common/decorators/current-user.decorator';
+import { PaginationParam } from '../common/dto/pagination.param';
+import { User } from '../users/entities/user.entity';
 import { ArticlesService } from './articles.service';
 import { ArticlePaginationResponse } from './dto/article-pagination.response';
 import { CreateArticleInput } from './dto/create-article.input';

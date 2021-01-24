@@ -1,7 +1,5 @@
 import { Field, GraphQLISODateTime, ObjectType } from '@nestjs/graphql';
 import { Exclude } from 'class-transformer';
-import { Article } from 'src/articles/entities/article.entity';
-import { salt, sign } from 'src/common/utils/password';
 import {
   BeforeInsert,
   BeforeUpdate,
@@ -10,6 +8,9 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+
+import { Article } from '../../articles/entities/article.entity';
+import { salt, sign } from '../../common/utils/password';
 
 @Entity()
 @ObjectType()

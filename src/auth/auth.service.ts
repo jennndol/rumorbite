@@ -1,9 +1,10 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { SignedUser } from 'src/common/dto/signed-user';
-import { compare } from 'src/common/utils/password';
-import { User } from 'src/users/entities/user.entity';
-import { UsersService } from 'src/users/users.service';
+
+import { SignedUser } from '../common/dto/signed-user';
+import { compare } from '../common/utils/password';
+import { User } from '../users/entities/user.entity';
+import { UsersService } from '../users/users.service';
 import { LoginUserInput } from './dto/login-user.input';
 import { RegisterUserInput } from './dto/register-user.input';
 

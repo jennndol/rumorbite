@@ -1,7 +1,8 @@
 import { Field, GraphQLISODateTime, ObjectType } from '@nestjs/graphql';
 import { Exclude } from 'class-transformer';
-import { User } from 'src/users/entities/user.entity';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+
+import { User } from '../../users/entities/user.entity';
 
 @Entity()
 @ObjectType()

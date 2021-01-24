@@ -12,7 +12,8 @@
     "prettier",
     "prettier/@typescript-eslint",
     "plugin:prettier/recommended",
-    "plugin:import/typescript"
+    "plugin:import/typescript",
+    "plugin:import/errors"
   ],
   "root": true,
   "env": {
@@ -22,6 +23,21 @@
   "rules": {
     "@typescript-eslint/no-explicit-any": "off",
     "no-mixed-spaces-and-tabs": ["error"],
-    "indent": ["error", 2]
+    "indent": ["error", 2],
+    "import/order": [
+      "error",
+      {
+          "newlines-between": "always",
+          "groups": [
+              "builtin",
+              ["internal", "external"],
+              ["sibling", "parent", "index"]
+          ],
+          "alphabetize": {
+              "order": "asc",
+              "caseInsensitive": true
+          }
+      }
+  ]
   }
 }

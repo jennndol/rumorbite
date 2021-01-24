@@ -1,8 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { PaginationParam } from 'src/common/dto/pagination.param';
-import { User } from 'src/users/entities/user.entity';
 import { IsNull, Like, Repository } from 'typeorm';
+
+import { PaginationParam } from '../common/dto/pagination.param';
+import { User } from '../users/entities/user.entity';
 import { ArticlePaginationResponse } from './dto/article-pagination.response';
 import { CreateArticleInput } from './dto/create-article.input';
 import { UpdateArticleInput } from './dto/update-article.input';
