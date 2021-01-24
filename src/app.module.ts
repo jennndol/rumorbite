@@ -1,7 +1,13 @@
-import { Logger, MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
+import {
+  Logger,
+  MiddlewareConsumer,
+  Module,
+  RequestMethod,
+} from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
+
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ArticlesModule } from './articles/articles.module';
@@ -16,7 +22,7 @@ import { UsersModule } from './users/users.module';
     GraphQLModule.forRoot({
       debug: process.env.GRAPHQL_DEBUG === 'true',
       playground: process.env.GRAPHQL_PLAYGROUND === 'true',
-      autoSchemaFile: 'schema.gql'
+      autoSchemaFile: 'schema.gql',
     }),
     TypeOrmModule.forRoot({
       type: 'mysql',
@@ -26,18 +32,20 @@ import { UsersModule } from './users/users.module';
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
       autoLoadEntities: true,
-      synchronize: true
+      synchronize: true,
     }),
     CommonModule,
     AuthModule,
     UsersModule,
-    ArticlesModule
+    ArticlesModule,
   ],
   controllers: [AppController],
   providers: [AppService, Logger],
 })
 export class AppModule {
-  configure(consumer: MiddlewareConsumer): void{
-    consumer.apply(LoggerMiddleware).forRoutes({ path: '*', method: RequestMethod.ALL });
+  configure(consumer: MiddlewareConsumer): void {
+    consumer
+      .apply(LoggerMiddleware)
+      .forRoutes({ path: '*', method: RequestMethod.ALL });
   }
 }

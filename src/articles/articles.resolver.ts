@@ -1,7 +1,8 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { CurrentUser } from 'src/common/decorators/current-user.decorator';
-import { PaginationParam } from 'src/common/dto/pagination.param';
-import { User } from 'src/users/entities/user.entity';
+
+import { CurrentUser } from '../common/decorators/current-user.decorator';
+import { PaginationParam } from '../common/dto/pagination.param';
+import { User } from '../users/entities/user.entity';
 import { ArticlesService } from './articles.service';
 import { ArticlePaginationResponse } from './dto/article-pagination.response';
 import { CreateArticleInput } from './dto/create-article.input';
@@ -13,12 +14,17 @@ export class ArticlesResolver {
   constructor(private readonly articlesService: ArticlesService) {}
 
   @Mutation(() => Article)
-  createArticle(@Args('input') createArticleInput: CreateArticleInput, @CurrentUser() currentUser: User): Promise<Article> {
+  createArticle(
+    @Args('input') createArticleInput: CreateArticleInput,
+    @CurrentUser() currentUser: User,
+  ): Promise<Article> {
     return this.articlesService.create(createArticleInput, currentUser);
   }
 
   @Query(() => ArticlePaginationResponse, { name: 'articles' })
-  findAll(@Args('param') paginationParam: PaginationParam): Promise<ArticlePaginationResponse> {
+  findAll(
+    @Args('param') paginationParam: PaginationParam,
+  ): Promise<ArticlePaginationResponse> {
     return this.articlesService.findAll(paginationParam);
   }
 
@@ -28,12 +34,17 @@ export class ArticlesResolver {
   }
 
   @Mutation(() => Article)
-  updateArticle(@Args('id', { type: () => String }) id: string, @Args('input') updateArticleInput: UpdateArticleInput): Promise<Article> {
+  updateArticle(
+    @Args('id', { type: () => String }) id: string,
+    @Args('input') updateArticleInput: UpdateArticleInput,
+  ): Promise<Article> {
     return this.articlesService.update(id, updateArticleInput);
   }
 
   @Mutation(() => Article)
-  removeArticle(@Args('id', { type: () => String }) id: string): Promise<Article> {
+  removeArticle(
+    @Args('id', { type: () => String }) id: string,
+  ): Promise<Article> {
     return this.articlesService.remove(id);
   }
 }
