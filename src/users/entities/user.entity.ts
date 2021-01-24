@@ -1,8 +1,9 @@
 import { Field, GraphQLISODateTime, ObjectType } from '@nestjs/graphql';
-import * as bcrypt from 'bcrypt';
 import { Exclude } from 'class-transformer';
 import { Article } from 'src/articles/entities/article.entity';
+import { salt, sign } from 'src/common/utils/password';
 import { BeforeInsert, BeforeUpdate, Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+
 
 @Entity()
 @ObjectType()
@@ -48,12 +49,16 @@ export class User {
   deletedAt: Date;
 
   @BeforeInsert()
-  async hashPasswordCreate() {
-    this.password = await bcrypt.hash(this.password, parseInt(process.env.HASH_SALT));
+  hashPasswordCreate() {
+    const generatedSalt = salt(parseInt(process.env.HASH_SALT_ROUNDS));
+    this.password = sign(this.password, generatedSalt);
   }
 
   @BeforeUpdate()
-  async hashPasswordUpdate() {
-    if(this.password) this.password = await bcrypt.hash(this.password, parseInt(process.env.HASH_SALT));
+  hashPasswordUpdate() {
+    if(this.password) {
+      const generatedSalt = salt(parseInt(process.env.HASH_SALT_ROUNDS));
+      this.password = sign(this.password, generatedSalt);
+    }
   }
 }
