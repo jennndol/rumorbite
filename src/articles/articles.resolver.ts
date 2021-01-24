@@ -13,7 +13,7 @@ export class ArticlesResolver {
   constructor(private readonly articlesService: ArticlesService) {}
 
   @Mutation(() => Article)
-  createArticle(@Args('input') createArticleInput: CreateArticleInput, @CurrentUser() currentUser: User) {
+  createArticle(@Args('input') createArticleInput: CreateArticleInput, @CurrentUser() currentUser: User): Promise<Article> {
     return this.articlesService.create(createArticleInput, currentUser);
   }
 
@@ -23,17 +23,17 @@ export class ArticlesResolver {
   }
 
   @Query(() => Article, { name: 'article' })
-  findOne(@Args('id', { type: () => String }) id: string) {
+  findOne(@Args('id', { type: () => String }) id: string): Promise<Article> {
     return this.articlesService.findOne(id);
   }
 
   @Mutation(() => Article)
-  updateArticle(@Args('id', { type: () => String }) id: string, @Args('input') updateArticleInput: UpdateArticleInput) {
+  updateArticle(@Args('id', { type: () => String }) id: string, @Args('input') updateArticleInput: UpdateArticleInput): Promise<Article> {
     return this.articlesService.update(id, updateArticleInput);
   }
 
   @Mutation(() => Article)
-  removeArticle(@Args('id', { type: () => String }) id: string) {
+  removeArticle(@Args('id', { type: () => String }) id: string): Promise<Article> {
     return this.articlesService.remove(id);
   }
 }
