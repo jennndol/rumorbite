@@ -67,6 +67,12 @@ type UserPaginationResponse {
 }
 
 type LoginUserResponse {
+  """Id field"""
+  id: String!
+
+  """Name field"""
+  name: String!
+
   """Token field"""
   token: String!
 }

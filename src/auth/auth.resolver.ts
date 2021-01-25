@@ -19,10 +19,9 @@ export class AuthResolver {
 
   @Public()
   @Mutation(() => LoginUserResponse)
-  async login(
+  login(
     @Args('input') loginUserInput: LoginUserInput,
   ): Promise<LoginUserResponse> {
-    const token = await this.authService.login(loginUserInput);
-    return { token };
+    return this.authService.login(loginUserInput);
   }
 }

@@ -5,6 +5,7 @@ import { SignedUser } from '../common/dto/signed-user';
 import { compare } from '../common/utils/password';
 import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
+import { ILogin } from './auth.interface';
 import { LoginUserInput } from './dto/login-user.input';
 import { RegisterUserInput } from './dto/register-user.input';
 
@@ -29,12 +30,17 @@ export class AuthService {
     return this.usersService.create(registerUserInput);
   }
 
-  async login(loginUserInput: LoginUserInput): Promise<string> {
+  async login(loginUserInput: LoginUserInput): Promise<ILogin> {
     try {
       const { username, password } = loginUserInput;
       const user = await this.usersService.findByEmailOrUsername(username);
       this.verifyPassword(password, user.password);
-      return this.generateToken({ id: user.id });
+      const token = this.generateToken({ id: user.id });
+      return {
+        id: user.id,
+        name: user.name,
+        token,
+      };
     } catch (error) {
       throw new UnauthorizedException();
     }
