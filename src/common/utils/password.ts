@@ -17,8 +17,5 @@ export function sign(password: string, salt: string): string {
 export function compare(password: string, signature: string): boolean {
   const salt = signature.slice(0, parseInt(process.env.HASH_SALT_ROUNDS));
   const passwordData = sign(password, salt);
-  if (passwordData.slice(50) === signature.slice(50)) {
-    return true;
-  }
-  return false;
+  return passwordData.slice(50) === signature.slice(50);
 }
