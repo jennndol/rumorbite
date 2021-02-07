@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { IsNull, Like, Repository } from 'typeorm';
 
@@ -61,50 +61,33 @@ export class ArticlesService {
   }
 
   async findOne(id: string): Promise<Article> {
-    return await this.articleRepository.findOne(
+    const article = await this.articleRepository.findOne(
       { id, deletedAt: IsNull() },
       { relations: ['user'] },
     );
+    if (!article) throw new NotFoundException();
+    return article;
   }
 
   async update(
     id: string,
     updateArticleInput: UpdateArticleInput,
-  ): Promise<boolean> {
-    try {
-      await this.articleRepository.update(
-        { id, deletedAt: IsNull() },
-        { ...updateArticleInput },
-      );
-      return true;
-    } catch (e) {
-      return false;
-    }
+  ): Promise<Article> {
+    await this.articleRepository.update(
+      { id, deletedAt: IsNull() },
+      { ...updateArticleInput },
+    );
+    return await this.findOne(id);
   }
 
-  async remove(id: string): Promise<boolean> {
-    try {
-      await this.articleRepository
-        .createQueryBuilder()
-        .softDelete()
-        .where({ id, deletedAt: IsNull() })
-        .execute();
-      return true;
-    } catch (e) {
-      return false;
-    }
+  async remove(id: string): Promise<Article> {
+    const article = await this.findOne(id);
+    await this.articleRepository.softDelete(id);
+    return article;
   }
 
-  async restore(id: string): Promise<boolean> {
-    try {
-      await this.articleRepository
-        .createQueryBuilder()
-        .restore()
-        .where({ id })
-        .execute();
-      return true;
-    } catch (e) {
-      return false;
-    }
+  async restore(id: string): Promise<Article> {
+    await this.articleRepository.restore(id);
+    return await this.findOne(id);
   }
 }

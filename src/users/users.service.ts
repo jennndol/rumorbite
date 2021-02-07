@@ -55,42 +55,23 @@ export class UsersService {
     );
   }
 
-  async update(id: string, updateUserInput: UpdateUserInput): Promise<boolean> {
-    try {
-      await this.userRepository.update(
-        { id, deletedAt: IsNull() },
-        { ...updateUserInput },
-      );
-      return true;
-    } catch (e) {
-      return false;
-    }
+  async update(id: string, updateUserInput: UpdateUserInput): Promise<User> {
+    await this.userRepository.update(
+      { id, deletedAt: IsNull() },
+      { ...updateUserInput },
+    );
+    return await this.findOne(id);
   }
 
-  async remove(id: string): Promise<boolean> {
-    try {
-      await this.userRepository
-        .createQueryBuilder()
-        .softDelete()
-        .where({ id, deletedAt: IsNull() })
-        .execute();
-      return true;
-    } catch (e) {
-      return false;
-    }
+  async remove(id: string): Promise<User> {
+    const user = await this.findOne(id);
+    await this.userRepository.softRemove({ id });
+    return user;
   }
 
-  async restore(id: string): Promise<boolean> {
-    try {
-      await this.userRepository
-        .createQueryBuilder()
-        .restore()
-        .where({ id })
-        .execute();
-      return true;
-    } catch (e) {
-      return false;
-    }
+  async restore(id: string): Promise<User> {
+    await this.userRepository.restore({ id });
+    return await this.findOne(id);
   }
 
   async findByEmailOrUsername(username: string): Promise<User> {

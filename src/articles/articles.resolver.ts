@@ -33,25 +33,25 @@ export class ArticlesResolver {
     return this.articlesService.findOne(id);
   }
 
-  @Mutation(() => Boolean)
+  @Mutation(() => Article)
   updateArticle(
     @Args('id', { type: () => String }) id: string,
     @Args('input') updateArticleInput: UpdateArticleInput,
-  ): Promise<boolean> {
+  ): Promise<Article> {
     return this.articlesService.update(id, updateArticleInput);
   }
 
-  @Mutation(() => Boolean)
+  @Mutation(() => Article)
   removeArticle(
     @Args('id', { type: () => String }) id: string,
-  ): Promise<boolean> {
+  ): Promise<Article> {
     return this.articlesService.remove(id);
   }
 
-  @Mutation(() => Boolean)
+  @Mutation(() => Article)
   restoreArticle(
     @Args('id', { type: () => String }) id: string,
-  ): Promise<boolean> {
+  ): Promise<Article> {
     return this.articlesService.restore(id);
   }
 }
