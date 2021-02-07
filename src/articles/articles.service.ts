@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { IsNull, Like, Repository } from 'typeorm';
 
@@ -20,11 +20,16 @@ export class ArticlesService {
     createArticleInput: CreateArticleInput,
     currentUser: User,
   ): Promise<Article> {
-    const article = await this.articleRepository.create({
+    this.articleRepository.create({
       ...createArticleInput,
       user: currentUser,
     });
-    return this.articleRepository.save(article);
+    return await this.articleRepository.save(
+      this.articleRepository.create({
+        ...createArticleInput,
+        user: currentUser,
+      }),
+    );
   }
 
   async findAll(
@@ -56,30 +61,50 @@ export class ArticlesService {
   }
 
   async findOne(id: string): Promise<Article> {
-    const article = await this.articleRepository.findOne(
+    return await this.articleRepository.findOne(
       { id, deletedAt: IsNull() },
       { relations: ['user'] },
     );
-    if (!article) throw new NotFoundException();
-    return article;
   }
 
   async update(
     id: string,
     updateArticleInput: UpdateArticleInput,
-  ): Promise<Article> {
-    const article = await this.findOne(id);
-    for (const key in updateArticleInput) {
-      if (Object.prototype.hasOwnProperty.call(updateArticleInput, key)) {
-        article[key] = updateArticleInput[key];
-      }
+  ): Promise<boolean> {
+    try {
+      await this.articleRepository.update(
+        { id, deletedAt: IsNull() },
+        { ...updateArticleInput },
+      );
+      return true;
+    } catch (e) {
+      return false;
     }
-    return this.articleRepository.save(article);
   }
 
-  async remove(id: string): Promise<Article> {
-    const article = await this.findOne(id);
-    article.deletedAt = new Date();
-    return this.articleRepository.save(article);
+  async remove(id: string): Promise<boolean> {
+    try {
+      await this.articleRepository
+        .createQueryBuilder()
+        .softDelete()
+        .where({ id, deletedAt: IsNull() })
+        .execute();
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  async restore(id: string): Promise<boolean> {
+    try {
+      await this.articleRepository
+        .createQueryBuilder()
+        .restore()
+        .where({ id })
+        .execute();
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 }

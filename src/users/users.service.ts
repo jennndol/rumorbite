@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { IsNull, Like, Repository } from 'typeorm';
 
@@ -49,39 +49,56 @@ export class UsersService {
   }
 
   async findOne(id: string): Promise<User> {
-    const user = await this.userRepository.findOne(
+    return await this.userRepository.findOne(
       { id, deletedAt: IsNull() },
       { relations: ['articles'] },
     );
-    if (!user) throw new NotFoundException();
-    return user;
   }
 
-  async update(id: string, updateUserInput: UpdateUserInput): Promise<User> {
-    const user = await this.findOne(id);
-    for (const key in updateUserInput) {
-      if (Object.prototype.hasOwnProperty.call(updateUserInput, key)) {
-        user[key] = updateUserInput[key];
-      }
+  async update(id: string, updateUserInput: UpdateUserInput): Promise<boolean> {
+    try {
+      await this.userRepository.update(
+        { id, deletedAt: IsNull() },
+        { ...updateUserInput },
+      );
+      return true;
+    } catch (e) {
+      return false;
     }
-    return this.userRepository.save(user);
   }
 
-  async remove(id: string): Promise<User> {
-    const user = await this.findOne(id);
-    user.deletedAt = new Date();
-    return this.userRepository.save(user);
+  async remove(id: string): Promise<boolean> {
+    try {
+      await this.userRepository
+        .createQueryBuilder()
+        .softDelete()
+        .where({ id, deletedAt: IsNull() })
+        .execute();
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  async restore(id: string): Promise<boolean> {
+    try {
+      await this.userRepository
+        .createQueryBuilder()
+        .restore()
+        .where({ id })
+        .execute();
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 
   async findByEmailOrUsername(username: string): Promise<User> {
-    const user = await this.userRepository.findOne({
-      where: [{ username: username }, { email: username }],
+    return await this.userRepository.findOne({
+      where: [
+        { username: username, deletedAt: IsNull() },
+        { email: username, deletedAt: IsNull() },
+      ],
     });
-    if (!user) throw new NotFoundException();
-    if (user.deletedAt) {
-      user.deletedAt = null;
-      await this.userRepository.save(user);
-    }
-    return user;
   }
 }

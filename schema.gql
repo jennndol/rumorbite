@@ -102,13 +102,15 @@ input PaginationParam {
 }
 
 type Mutation {
-  updateUser(input: UpdateUserInput!, id: String!): User!
-  removeUser(id: String!): User!
+  updateUser(input: UpdateUserInput!, id: String!): Boolean!
+  removeUser(id: String!): Boolean!
+  restoreUser(id: String!): Boolean!
   register(input: RegisterUserInput!): User!
   login(input: LoginUserInput!): LoginUserResponse!
   createArticle(input: CreateArticleInput!): Article!
-  updateArticle(input: UpdateArticleInput!, id: String!): Article!
-  removeArticle(id: String!): Article!
+  updateArticle(input: UpdateArticleInput!, id: String!): Boolean!
+  removeArticle(id: String!): Boolean!
+  restoreArticle(id: String!): Boolean!
 }
 
 input UpdateUserInput {
