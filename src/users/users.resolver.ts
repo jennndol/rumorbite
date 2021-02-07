@@ -22,16 +22,23 @@ export class UsersResolver {
     return this.usersService.findOne(id);
   }
 
-  @Mutation(() => User)
+  @Mutation(() => Boolean)
   updateUser(
     @Args('id', { type: () => String }) id: string,
     @Args('input') updateUserInput: UpdateUserInput,
-  ): Promise<User> {
+  ): Promise<boolean> {
     return this.usersService.update(id, updateUserInput);
   }
 
-  @Mutation(() => User)
-  removeUser(@Args('id', { type: () => String }) id: string): Promise<User> {
+  @Mutation(() => Boolean)
+  removeUser(@Args('id', { type: () => String }) id: string): Promise<boolean> {
     return this.usersService.remove(id);
+  }
+
+  @Mutation(() => Boolean)
+  restoreUser(
+    @Args('id', { type: () => String }) id: string,
+  ): Promise<boolean> {
+    return this.usersService.restore(id);
   }
 }
