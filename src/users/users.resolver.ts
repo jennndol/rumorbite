@@ -34,4 +34,9 @@ export class UsersResolver {
   removeUser(@Args('id', { type: () => String }) id: string): Promise<User> {
     return this.usersService.remove(id);
   }
+
+  @Mutation(() => User)
+  restoreUser(@Args('id', { type: () => String }) id: string): Promise<User> {
+    return this.usersService.restore(id);
+  }
 }

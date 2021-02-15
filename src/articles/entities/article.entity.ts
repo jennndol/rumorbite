@@ -1,6 +1,12 @@
 import { Field, GraphQLISODateTime, ObjectType } from '@nestjs/graphql';
 import { Exclude } from 'class-transformer';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  DeleteDateColumn,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 import { User } from '../../users/entities/user.entity';
 
@@ -36,6 +42,6 @@ export class Article {
   updatedAt: Date;
 
   @Exclude()
-  @Column({ type: 'timestamp', nullable: true })
+  @DeleteDateColumn()
   deletedAt: Date;
 }

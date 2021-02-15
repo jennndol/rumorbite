@@ -47,4 +47,11 @@ export class ArticlesResolver {
   ): Promise<Article> {
     return this.articlesService.remove(id);
   }
+
+  @Mutation(() => Article)
+  restoreArticle(
+    @Args('id', { type: () => String }) id: string,
+  ): Promise<Article> {
+    return this.articlesService.restore(id);
+  }
 }

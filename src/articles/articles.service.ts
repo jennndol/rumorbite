@@ -20,11 +20,16 @@ export class ArticlesService {
     createArticleInput: CreateArticleInput,
     currentUser: User,
   ): Promise<Article> {
-    const article = await this.articleRepository.create({
+    this.articleRepository.create({
       ...createArticleInput,
       user: currentUser,
     });
-    return this.articleRepository.save(article);
+    return await this.articleRepository.save(
+      this.articleRepository.create({
+        ...createArticleInput,
+        user: currentUser,
+      }),
+    );
   }
 
   async findAll(
@@ -68,18 +73,21 @@ export class ArticlesService {
     id: string,
     updateArticleInput: UpdateArticleInput,
   ): Promise<Article> {
-    const article = await this.findOne(id);
-    for (const key in updateArticleInput) {
-      if (Object.prototype.hasOwnProperty.call(updateArticleInput, key)) {
-        article[key] = updateArticleInput[key];
-      }
-    }
-    return this.articleRepository.save(article);
+    await this.articleRepository.update(
+      { id, deletedAt: IsNull() },
+      { ...updateArticleInput },
+    );
+    return await this.findOne(id);
   }
 
   async remove(id: string): Promise<Article> {
     const article = await this.findOne(id);
-    article.deletedAt = new Date();
-    return this.articleRepository.save(article);
+    await this.articleRepository.softDelete(id);
+    return article;
+  }
+
+  async restore(id: string): Promise<Article> {
+    await this.articleRepository.restore(id);
+    return await this.findOne(id);
   }
 }
