@@ -1,2 +1,2 @@
 # backend
-Backend service for Ayongampus system
+Backend service for blogging system
