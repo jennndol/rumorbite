@@ -1,7 +1,0 @@
-{
-    "editor.codeActionsOnSave": {
-        "source.fixAll": true
-    },
-    "editor.fontFamily": "Dank Mono",
-    "editor.fontLigatures": true
-}
